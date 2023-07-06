@@ -1,0 +1,37 @@
+{
+  "name": "ecom_backend",
+  "version": "1.0.0",
+  "description": "ecommerce backend api create where product create, order create and user create",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "data:import": "node seeder.js",
+    "data:destroy": "node seeder.js -d",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nayanrdeveloper/ecommerce_MERN_stack.git"
+  },
+  "keywords": [
+    "ecom",
+    "MERN",
+    "products"
+  ],
+  "author": "Nayan Radadiya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nayanrdeveloper/ecommerce_MERN_stack/issues"
+  },
+  "homepage": "https://github.com/nayanrdeveloper/ecommerce_MERN_stack#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
