@@ -8,7 +8,7 @@ const HomeScreen = () => {
   const [products, setProducts] = useState([]);
   const fetProduct = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8080/products");
+      const { data } = await axios.get("http://localhost:8080/api/products");
       setProducts(data);
     } catch (error) {
       console.log(error);

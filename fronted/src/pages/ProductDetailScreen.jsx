@@ -17,7 +17,7 @@ const ProductDetailScreen = () => {
   const [product, setProduct] = useState();
   const fetchProduct = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8080/product/${id}`);
+      const { data } = await axios.get(`http://localhost:8080/api/product/${id}`);
       setProduct(data);
     } catch (error) {
       console.log(error);
