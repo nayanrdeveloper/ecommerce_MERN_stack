@@ -1,16 +1,20 @@
 import { useState } from "react";
 import { Button, Col, Form, Image, ListGroup, Row } from "react-bootstrap";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import Rating from "../components/Rating";
 import { useGetProductByIdQuery } from "../features/api/productApiSlice";
+import { addItemToCart } from "../features/api/cartSlice";
 
 const ProductDetailScreen = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { data, error, isLoading } = useGetProductByIdQuery(id);
+  const { data: product, error, isLoading } = useGetProductByIdQuery(id);
   const [qty, setQty] = useState(0);
 
   const gotoCartNavigate = () => {
+    dispatch(addItemToCart({ product, qty }));
     navigate(`/cart/${id}?qty=${qty}`);
   };
 
@@ -22,7 +26,7 @@ const ProductDetailScreen = () => {
     return <p>Error: {error.message}</p>;
   }
 
-  if (!data) {
+  if (!product) {
     return null;
   }
 
@@ -33,18 +37,18 @@ const ProductDetailScreen = () => {
       </Link>
       <Row>
         <Col md={6}>
-          <Image src={data.image} alt={data.name} fluid />
+          <Image src={product.image} alt={product.name} fluid />
         </Col>
         <Col md={3}>
           <ListGroup>
             <ListGroup.Item>
-              <h3>{data.name}</h3>
+              <h3>{product.name}</h3>
             </ListGroup.Item>
             <ListGroup.Item>
-              <Rating value={data.rating} reviews={data.numReviews} />
+              <Rating value={product.rating} reviews={product.numReviews} />
             </ListGroup.Item>
-            <ListGroup.Item>Price: ${data.price}</ListGroup.Item>
-            <ListGroup.Item>{data.description}</ListGroup.Item>
+            <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
+            <ListGroup.Item>{product.description}</ListGroup.Item>
           </ListGroup>
         </Col>
         <Col md={3}>
@@ -52,19 +56,21 @@ const ProductDetailScreen = () => {
             <ListGroup.Item>
               <Row>
                 <Col>Status:</Col>
-                <Col>{data.countInStock > 0 ? "In Stock" : "Out of Stock"}</Col>
+                <Col>
+                  {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
+                </Col>
               </Row>
             </ListGroup.Item>
-            {data.countInStock > 0 && (
+            {product.countInStock > 0 && (
               <ListGroup.Item>
                 <Row>
                   <Col>Qty</Col>
                   <Form.Control
                     as="select"
                     value={qty}
-                    onChange={(e) => setQty(e.target.value)}
+                    onChange={(e) => setQty(parseInt(e.target.value))}
                   >
-                    {[...Array(data.countInStock).keys()].map((x) => (
+                    {[...Array(product.countInStock).keys()].map((x) => (
                       <option key={x + 1} value={x + 1}>
                         {x + 1}
                       </option>
@@ -78,7 +84,7 @@ const ProductDetailScreen = () => {
                 className="btn-block"
                 type="button"
                 onClick={gotoCartNavigate}
-                disabled={data.countInStock <= 0}
+                disabled={product.countInStock <= 0}
               >
                 Add to Cart
               </Button>
